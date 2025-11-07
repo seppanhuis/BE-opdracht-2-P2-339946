@@ -61,13 +61,7 @@ class ProductModel extends Model
      */
     public function getProductAllergenen(int $productId)
     {
-        $sql = "SELECT A.Id, A.Naam, A.Omschrijving
-                FROM Allergeen A
-                INNER JOIN ProductPerAllergeen PPA ON PPA.AllergeenId = A.Id
-                WHERE PPA.ProductId = ?
-                ORDER BY A.Naam ASC";
-
-        return DB::select($sql, [$productId]);
+        return DB::select('CALL sp_GetProductAllergenen(?)', [$productId]);
     }
 
     /**
@@ -75,8 +69,7 @@ class ProductModel extends Model
      */
     public function getProductById(int $productId)
     {
-        $sql = "SELECT Id, Naam, Barcode FROM Product WHERE Id = ? LIMIT 1";
-        $rows = DB::select($sql, [$productId]);
+        $rows = DB::select('CALL sp_GetProductById(?)', [$productId]);
         return count($rows) ? $rows[0] : null;
     }
 
@@ -85,9 +78,8 @@ class ProductModel extends Model
      */
     public function getSupplierById(int $supplierId)
     {
-        // alias Contactpersoon to ContactPersoon to match stored-proc result naming and views
-        $sql = "SELECT Id, Naam, Contactpersoon AS ContactPersoon, Leveranciernummer, Mobiel FROM Leverancier WHERE Id = ? LIMIT 1";
-        $rows = DB::select($sql, [$supplierId]);
+        // Use stored procedure to keep SQL centralized and ensure aliasing consistency
+        $rows = DB::select('CALL sp_GetSupplierById(?)', [$supplierId]);
         return count($rows) ? $rows[0] : null;
     }
 }
