@@ -35,11 +35,6 @@
                     <input name="datum_eerstvolgende" type="date" class="mt-1 block w-full rounded-md border-gray-300 dark:border-zinc-700 dark:bg-zinc-800 dark:text-gray-100 focus:ring-sky-500 focus:border-sky-500">
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Datum levering (optioneel)</label>
-                    <input name="datum_levering" type="date" class="mt-1 block w-full rounded-md border-gray-300 dark:border-zinc-700 dark:bg-zinc-800 dark:text-gray-100 focus:ring-sky-500 focus:border-sky-500">
-                </div>
-
                 <div class="flex items-center gap-3">
                     <button type="submit" class="inline-flex items-center px-4 py-2 bg-sky-600 dark:bg-sky-500 text-white rounded-md hover:bg-sky-700 dark:hover:bg-sky-600">Sla op</button>
                     <a href="{{ url()->previous() }}" class="inline-flex items-center px-4 py-2 bg-gray-200 dark:bg-zinc-800 text-gray-800 dark:text-gray-200 rounded-md hover:bg-gray-300 dark:hover:bg-zinc-700">Terug</a>
