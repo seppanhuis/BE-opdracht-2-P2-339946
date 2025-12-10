@@ -109,6 +109,9 @@ VALUES
     ,('Kruis Drop', '8719587322265')
     ,('Zoute Ruitjes', '8719587323256');
 
+-- Update Winegums to inactive (not produced anymore)
+UPDATE Product SET IsActief = 0 WHERE Naam = 'Winegums';
+
 
 -- Step 06:
 -- Goal: Create a new table Magazijn

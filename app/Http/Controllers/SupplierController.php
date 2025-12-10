@@ -88,8 +88,21 @@ class SupplierController extends Controller
             session()->flash('success', 'Levering toegevoegd en voorraad bijgewerkt.');
             return redirect()->route('suppliers.products', ['id' => $supplierId]);
         } catch (\Exception $e) {
-            // if SP signaled business error it will be here
-            session()->flash('error', $e->getMessage());
+            // Get product and supplier info for error message
+            $product = $this->model->getProductById((int)$productId);
+            $supplier = $this->model->getSupplierById((int)$supplierId);
+
+            // Extract the actual error message from SQL error
+            $errorMessage = $e->getMessage();
+
+            // Parse SQL error to get only the message text
+            // Format: SQLSTATE[45000]: <<Unknown error>>: 1644 Message (Connection: mysql, SQL: ...)
+            if (preg_match('/:\s*\d+\s+([^(]+)(?:\s*\(Connection:)?/', $errorMessage, $matches)) {
+                $errorMessage = trim($matches[1]);
+            }
+
+            session()->flash('error', $errorMessage);
+            session()->flash('redirectUrl', route('suppliers.products', ['id' => $supplierId]));
 
             // when product not active, follow userstory: show message on delivery page then redirect after 4 sec
             return redirect()->route('suppliers.delivery', ['supplierId' => $supplierId, 'productId' => $productId]);

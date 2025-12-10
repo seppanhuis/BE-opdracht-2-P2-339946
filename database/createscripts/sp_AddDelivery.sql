@@ -11,6 +11,9 @@ CREATE PROCEDURE sp_AddDelivery(
 )
 BEGIN
     DECLARE v_isActief TINYINT DEFAULT 1;
+    DECLARE v_productNaam VARCHAR(255);
+    DECLARE v_leverancierNaam VARCHAR(255);
+    DECLARE v_errorMessage VARCHAR(500);
 
     -- Validate quantity
     IF p_Aantal IS NULL OR p_Aantal <= 0 THEN
@@ -19,10 +22,15 @@ BEGIN
 
     -- Check product active flag (if column exists)
     -- If the column does not exist this SELECT will return NULL and COALESCE will default to 1.
-    SELECT COALESCE(IsActief, 1) INTO v_isActief FROM Product WHERE Id = p_ProductId LIMIT 1;
+    SELECT COALESCE(IsActief, 1), Naam INTO v_isActief, v_productNaam FROM Product WHERE Id = p_ProductId LIMIT 1;
 
     IF v_isActief = 0 THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Het product wordt niet meer geproduceerd';
+        -- Get supplier name
+        SELECT Naam INTO v_leverancierNaam FROM Leverancier WHERE Id = p_LeverancierId LIMIT 1;
+
+        -- Build error message with product and supplier names
+        SET v_errorMessage = CONCAT('Het product ', v_productNaam, ' van de leverancier ', v_leverancierNaam, ' wordt niet meer geproduceerd');
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_errorMessage;
     END IF;
 
     -- Insert delivery record

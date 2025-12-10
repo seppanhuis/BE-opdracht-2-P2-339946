@@ -1,7 +1,7 @@
 <x-layouts.app :title="__('Levering product')">
     @push('head')
         @if(session('error'))
-            <meta http-equiv="refresh" content="4;url={{ url()->previous() }}">
+            <meta http-equiv="refresh" content="4;url={{ session('redirectUrl', url()->previous()) }}">
         @endif
     @endpush
 

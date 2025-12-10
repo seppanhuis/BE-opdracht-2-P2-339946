@@ -1,4 +1,10 @@
 <x-layouts.app :title="__('Geleverde producten')">
+    @push('head')
+        @if(empty($products) || count($products) === 0)
+            <meta http-equiv="refresh" content="3;url={{ route('suppliers.index') }}">
+        @endif
+    @endpush
+
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div class="bg-white dark:bg-zinc-900 shadow ring-1 ring-black/5 dark:ring-white/5 rounded-lg p-6">
             <div class="flex items-center justify-between mb-6">
@@ -38,7 +44,10 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="px-4 py-6 text-center text-sm text-gray-500 dark:text-gray-400">Dit bedrijf heeft tot nu toe geen producten geleverd aan Jamin</td>
+                                <td colspan="5" class="px-4 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
+                                    <div>Dit bedrijf heeft tot nu toe geen producten geleverd aan Jamin</div>
+                                    <div class="mt-2 text-xs text-gray-400 dark:text-gray-500">Je wordt over 3 seconden teruggebracht naar het overzicht.</div>
+                                </td>
                             </tr>
                         @endforelse
                     </tbody>
