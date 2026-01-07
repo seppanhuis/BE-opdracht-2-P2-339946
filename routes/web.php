@@ -5,6 +5,7 @@ use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\LeverancierController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -27,6 +28,12 @@ Route::get('/suppliers/{id}/products', [SupplierController::class, 'products'])-
 // Delivery create/store
 Route::get('/suppliers/{supplierId}/product/{productId}/delivery', [SupplierController::class, 'createDelivery'])->name('suppliers.delivery');
 Route::post('/suppliers/{supplierId}/product/{productId}/delivery', [SupplierController::class, 'storeDelivery'])->name('suppliers.delivery.store');
+
+// Wijzigen Leveranciers
+Route::get('/leveranciers', [LeverancierController::class, 'index'])->name('leveranciers.index');
+Route::get('/leveranciers/{id}/details', [LeverancierController::class, 'details'])->name('leveranciers.details');
+Route::get('/leveranciers/{id}/edit', [LeverancierController::class, 'edit'])->name('leveranciers.edit');
+Route::put('/leveranciers/{id}', [LeverancierController::class, 'update'])->name('leveranciers.update');
 
 
 

@@ -16,6 +16,7 @@ Use `BE-p1`;
 -- Version       Date:           Author:                     Description:
 -- *******       **********      ****************            ******************
 -- 01            12-09-2025      Arjan de Ruijter            New Tabel
+-- 02            07-01-2026      Arjan de Ruijter            Fix drop order
 -- **********************************************************************************/
 
 DROP TABLE IF EXISTS ProductPerAllergeen;
@@ -64,8 +65,11 @@ VALUES
 -- ********       ****        *******           ***********
 -- 01             18-10-2024  Arjan de Ruijter  New table
 -- 02             10-10-2025  Arjan de Ruijter  Default aangepast
+-- 03             07-01-2026  Arjan de Ruijter  Fix drop order
 -- **************************************************************
+DROP TABLE IF EXISTS ProductPerLeverancier;
 DROP TABLE IF EXISTS Magazijn;
+DROP TABLE IF EXISTS ProductPerAllergeen;
 DROP TABLE IF EXISTS Product;
 
 CREATE TABLE IF NOT EXISTS Product
@@ -166,15 +170,64 @@ VALUES
 
 
 -- Step 08:
+-- Goal: Create a new table Contact
+-- ********************************************************
+-- Version:       Date:       Author:           Description
+-- ********       ****        *******           ***********
+-- 01             07-01-2026  Arjan de Ruijter  New table
+-- ********************************************************
+
+DROP TABLE IF EXISTS ProductPerLeverancier;
+DROP TABLE IF EXISTS Leverancier;
+DROP TABLE IF EXISTS Contact;
+
+CREATE TABLE IF NOT EXISTS Contact
+(
+     Id                 SMALLINT             UNSIGNED        NOT NULL      AUTO_INCREMENT
+    ,Straat             VARCHAR(100)                         NOT NULL
+    ,Huisnummer         VARCHAR(10)                          NOT NULL
+    ,Postcode           VARCHAR(10)                          NOT NULL
+    ,Stad               VARCHAR(60)                          NOT NULL
+    ,IsActief           BIT                                  NOT NULL      DEFAULT 1
+    ,Opmerking          VARCHAR(250)                             NULL      DEFAULT NULL
+    ,DatumAangemaakt Datetime(6)                             NOT NULL      DEFAULT CURRENT_TIMESTAMP(6)
+    ,DatumGewijzigd  Datetime(6)                             NOT NULL      DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)
+    ,CONSTRAINT      PK_Contact_Id        PRIMARY KEY (Id)
+) ENGINE=InnoDB   AUTO_INCREMENT=1;
+
+
+-- Step 08b:
+-- Goal: Fill table Contact with data
+-- ***********************************************************
+-- Version:       Date:       Author:           Description
+-- ********       ****        ****************  ***********
+-- 01             07-01-2026  Arjan de Ruijter  Insert Records
+-- ***********************************************************
+
+INSERT INTO Contact
+(
+     Straat
+    ,Huisnummer
+    ,Postcode
+    ,Stad
+)
+VALUES
+     ('Van Gilslaan', '34', '1045CB', 'Hilvarenbeek')
+    ,('Den Dolderpad', '2', '1067RC', 'Utrecht')
+    ,('Fredo Raalteweg', '257', '1236OP', 'Nijmegen')
+    ,('Bertrand Russellhof', '21', '2034AP', 'Den Haag')
+    ,('Leon van Bonstraat', '213', '145XC', 'Lunteren')
+    ,('Bea van Lingenlaan', '234', '2197FG', 'Sint Pancras');
+
+
+-- Step 09:
 -- Goal: Create a new table Leverancier
 -- ********************************************************
 -- Version:       Date:       Author:           Description
 -- ********       ****        *******           ***********
 -- 01             25-10-2024  Arjan de Ruijter  New table
+-- 02             07-01-2026  Arjan de Ruijter  Add ContactId FK
 -- ********************************************************
-
-DROP TABLE IF EXISTS ProductPerLeverancier;
-DROP TABLE IF EXISTS Leverancier;
 
 CREATE TABLE IF NOT EXISTS Leverancier
 (
@@ -183,20 +236,23 @@ CREATE TABLE IF NOT EXISTS Leverancier
     ,Contactpersoon     VARCHAR(60)                          NOT NULL
     ,Leveranciernummer  VARCHAR(11)                          NOT NULL
     ,Mobiel             VARCHAR(11)                          NOT NULL
+    ,ContactId          SMALLINT             UNSIGNED        NOT NULL
     ,IsActief           BIT                                  NOT NULL      DEFAULT 1
     ,Opmerking          VARCHAR(250)                             NULL      DEFAULT NULL
     ,DatumAangemaakt Datetime(6)                             NOT NULL      DEFAULT CURRENT_TIMESTAMP(6)
     ,DatumGewijzigd  Datetime(6)                             NOT NULL      DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)
     ,CONSTRAINT      PK_Levrancier_Id        PRIMARY KEY (Id)
+    ,CONSTRAINT      FK_Leverancier_ContactId_Contact_Id  FOREIGN KEY (ContactId) REFERENCES Contact (Id)
 ) ENGINE=InnoDB   AUTO_INCREMENT=1;
 
 
--- Step: 09
+-- Step: 09b
 -- Goal: Fill table Levrancier with data
 -- ***********************************************************
 -- Version:       Date:       Author:           Description
--- ********       ****        *******           ***********
+-- ********       ****        ****************  ***********
 -- 01             25-10-2024  Arjan de Ruijter  Insert Records
+-- 02             07-01-2026  Arjan de Ruijter  Add ContactId values
 -- ***********************************************************
 
 INSERT INTO Leverancier
@@ -205,14 +261,15 @@ INSERT INTO Leverancier
     ,Contactpersoon
     ,Leveranciernummer
     ,Mobiel
+    ,ContactId
 )
 VALUES
-     ('Venco', 'Bert van Linge', 'L1029384719', '06-28493827')
-    ,('Astra Sweets', 'Jasper del Monte', 'L1029284315', '06-39398734')
-    ,('Haribo', 'Sven Stalman', 'L1029324748', '06-24383291')
-    ,('Basset', 'Joyce Stelterberg', 'L1023845773', '06-48293823')
-    ,('De Bron', 'Remco Veenstra', 'L1023857736', '06-34291234')
-    ,('Quality Street', 'Johan Nooij', 'L1029234586', '06-23458456');
+     ('Venco', 'Bert van Linge', 'L1029384719', '06-28493827', 1)
+    ,('Astra Sweets', 'Jasper del Monte', 'L1029284315', '06-39398734', 2)
+    ,('Haribo', 'Sven Stalman', 'L1029324748', '06-24383291', 3)
+    ,('Basset', 'Joyce Stelterberg', 'L1023845773', '06-48293823', 4)
+    ,('De Bron', 'Remco Veenstra', 'L1023857736', '06-34291234', 5)
+    ,('Quality Street', 'Johan Nooij', 'L1029234586', '06-23458456', 6);
 
 
 

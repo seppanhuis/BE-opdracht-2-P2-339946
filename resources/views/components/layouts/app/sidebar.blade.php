@@ -24,6 +24,12 @@
                     :current="request()->routeIs('suppliers.index')" wire:navigate>{{ __('Leveranciers') }}
                 </flux:navlist.item>
             </flux:navlist.group>
+
+            <flux:navlist.group :heading="__('Beheer')" class="grid">
+                <flux:navlist.item icon="pencil-square" :href="route('leveranciers.index')"
+                    :current="request()->routeIs('leveranciers.*')" wire:navigate>{{ __('Wijzigen Leveranciers') }}
+                </flux:navlist.item>
+            </flux:navlist.group>
         </flux:navlist>
 
         <flux:spacer />
