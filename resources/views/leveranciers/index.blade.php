@@ -14,6 +14,7 @@
                             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Leveranciernummer</th>
                             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Mobiel</th>
                             <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Leverancier Details</th>
+                            <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Toon Producten</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white dark:bg-zinc-900">
@@ -30,6 +31,9 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                                         </svg>
                                     </a>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-center">
+                                    <a href="{{ route('suppliers.products', ['id' => $leverancier->Id]) }}" class="inline-flex items-center px-3 py-1.5 bg-sky-600 dark:bg-sky-500 text-white text-sm rounded-md hover:bg-sky-700 dark:hover:bg-sky-600">Toon</a>
                                 </td>
                             </tr>
                         @empty

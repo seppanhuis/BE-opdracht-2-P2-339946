@@ -55,7 +55,7 @@
             </div>
 
             <div class="mt-6 flex justify-between">
-                <a href="/suppliers" class="inline-flex items-center px-4 py-2 bg-gray-200 dark:bg-zinc-800 text-gray-800 dark:text-gray-200 rounded-md hover:bg-gray-300 dark:hover:bg-zinc-700">Terug</a>
+                <a href="/leveranciers" class="inline-flex items-center px-4 py-2 bg-gray-200 dark:bg-zinc-800 text-gray-800 dark:text-gray-200 rounded-md hover:bg-gray-300 dark:hover:bg-zinc-700">Terug</a>
             </div>
 
         </div>

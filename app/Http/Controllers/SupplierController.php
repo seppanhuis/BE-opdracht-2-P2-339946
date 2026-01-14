@@ -20,7 +20,7 @@ class SupplierController extends Controller
     {
         $suppliers = $this->model->sp_GetSupplierOverview();
 
-        return view('suppliers.index', [
+        return view('leveranciers.index', [
             'title' => 'Overzicht Leveranciers',
             'suppliers' => $suppliers
         ]);

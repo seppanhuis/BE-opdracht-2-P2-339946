@@ -20,14 +20,11 @@
                 <flux:navlist.item icon="house" :href="route('product.index')"
                     :current="request()->routeIs('product.index')" wire:navigate>{{ __('Magazijn') }}
                 </flux:navlist.item>
-                <flux:navlist.item icon="truck" :href="route('suppliers.index')"
-                    :current="request()->routeIs('suppliers.index')" wire:navigate>{{ __('Leveranciers') }}
-                </flux:navlist.item>
             </flux:navlist.group>
 
             <flux:navlist.group :heading="__('Beheer')" class="grid">
                 <flux:navlist.item icon="pencil-square" :href="route('leveranciers.index')"
-                    :current="request()->routeIs('leveranciers.*')" wire:navigate>{{ __('Wijzigen Leveranciers') }}
+                    :current="request()->routeIs('leveranciers.*')" wire:navigate>{{ __('Leveranciers') }}
                 </flux:navlist.item>
             </flux:navlist.group>
         </flux:navlist>
