@@ -20,6 +20,9 @@
                 <flux:navlist.item icon="house" :href="route('product.index')"
                     :current="request()->routeIs('product.index')" wire:navigate>{{ __('Magazijn') }}
                 </flux:navlist.item>
+                <flux:navlist.item icon="beaker" :href="route('allergeen.index')"
+                    :current="request()->routeIs('allergeen.*')" wire:navigate>{{ __('Allergenen') }}
+                </flux:navlist.item>
             </flux:navlist.group>
 
             <flux:navlist.group :heading="__('Beheer')" class="grid">

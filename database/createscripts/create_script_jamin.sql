@@ -111,7 +111,8 @@ VALUES
     ,('Winegums', '8719587327527')
     ,('Drop Munten', '8719587322345')
     ,('Kruis Drop', '8719587322265')
-    ,('Zoute Ruitjes', '8719587323256');
+    ,('Zoute Ruitjes', '8719587323256')
+    ,("Drop ninja\'s", '8719587323277');
 
 -- Update Winegums to inactive (not produced anymore)
 UPDATE Product SET IsActief = 0 WHERE Naam = 'Winegums';
@@ -163,10 +164,11 @@ VALUES
     ,(7, 1, 795)
     ,(8, 10, 233)
     ,(9, 2.5, 123)
-    ,(10, 3, 0)
+    ,(10, 3, NULL)
     ,(11, 2, 367)
     ,(12, 1, 467)
-    ,(13, 5, 20);
+    ,(13, 5, 20)
+    ,(14, 1, 0);
 
 
 -- Step 08:
@@ -236,7 +238,7 @@ CREATE TABLE IF NOT EXISTS Leverancier
     ,Contactpersoon     VARCHAR(60)                          NOT NULL
     ,Leveranciernummer  VARCHAR(11)                          NOT NULL
     ,Mobiel             VARCHAR(11)                          NOT NULL
-    ,ContactId          SMALLINT             UNSIGNED        NOT NULL
+    ,ContactId          SMALLINT             UNSIGNED            NULL
     ,IsActief           BIT                                  NOT NULL      DEFAULT 1
     ,Opmerking          VARCHAR(250)                             NULL      DEFAULT NULL
     ,DatumAangemaakt Datetime(6)                             NOT NULL      DEFAULT CURRENT_TIMESTAMP(6)
@@ -269,7 +271,8 @@ VALUES
     ,('Haribo', 'Sven Stalman', 'L1029324748', '06-24383291', 3)
     ,('Basset', 'Joyce Stelterberg', 'L1023845773', '06-48293823', 4)
     ,('De Bron', 'Remco Veenstra', 'L1023857736', '06-34291234', 5)
-    ,('Quality Street', 'Johan Nooij', 'L1029234586', '06-23458456', 6);
+    ,('Quality Street', 'Johan Nooij', 'L1029234586', '06-23458456', 6)
+    ,('Hom Ken Food', 'Hom Ken', 'L1029234599', '06-23458477', NULL);
 
 
 
@@ -333,6 +336,7 @@ VALUES
 ,(5, 11, '2024-10-10', 47, '2024-10-17')
 ,(5, 11, '2024-10-19', 60, '2024-10-26')
 ,(5, 12, '2024-10-11', 45, NULL)
+,(7, 14, '2023-04-14', 20, NULL)
 ,(5, 13, '2024-10-12', 23, NULL);
 
 
@@ -384,6 +388,7 @@ VALUES
  ,(10, 2)
  ,(12, 4)
  ,(13, 1)
+ ,(14, 5)
  ,(13, 4)
  ,(13, 5);
 

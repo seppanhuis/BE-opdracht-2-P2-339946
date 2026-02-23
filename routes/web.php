@@ -6,6 +6,7 @@ use Livewire\Volt\Volt;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\LeverancierController;
+use App\Http\Controllers\AllergeenController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -34,6 +35,11 @@ Route::get('/leveranciers', [LeverancierController::class, 'index'])->name('leve
 Route::get('/leveranciers/{id}/details', [LeverancierController::class, 'details'])->name('leveranciers.details');
 Route::get('/leveranciers/{id}/edit', [LeverancierController::class, 'edit'])->name('leveranciers.edit');
 Route::put('/leveranciers/{id}', [LeverancierController::class, 'update'])->name('leveranciers.update');
+
+// Overzicht Allergenen
+Route::get('/allergenen', [AllergeenController::class, 'index'])->name('allergeen.index');
+Route::get('/allergenen/product/{id}/leverancier', [AllergeenController::class, 'leverancierInfo'])->name('allergeen.leverancier');
+
 
 
 
