@@ -1,0 +1,164 @@
+<mxfile host="app.diagrams.net" modified="2026-02-23T12:00:00.000Z" agent="5.0" version="24.0.0" etag="drawio-diagram" type="device">
+  <diagram name="BE-Jamin Database Class Diagram" id="database-class-diagram">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Product Class -->
+        <mxCell id="product" value="Product" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="400" y="100" width="250" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="product-attrs" value="+ Id: MEDIUMINT&#xa;+ Naam: VARCHAR(255)&#xa;+ Barcode: VARCHAR(13)&#xa;+ IsActief: BIT&#xa;+ Opmerking: VARCHAR(250)&#xa;+ DatumAangemaakt: DateTime&#xa;+ DatumGewijzigd: DateTime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="product">
+          <mxGeometry y="26" width="250" height="164" as="geometry" />
+        </mxCell>
+
+        <!-- Allergeen Class -->
+        <mxCell id="allergeen" value="Allergeen" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="80" y="350" width="250" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="allergeen-attrs" value="+ Id: SMALLINT&#xa;+ Naam: VARCHAR(30)&#xa;+ Omschrijving: VARCHAR(100)&#xa;+ IsActief: BIT&#xa;+ Opmerking: VARCHAR(250)&#xa;+ DatumAangemaakt: DateTime&#xa;+ DatumGewijzigd: DateTime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="allergeen">
+          <mxGeometry y="26" width="250" height="164" as="geometry" />
+        </mxCell>
+
+        <!-- Magazijn Class -->
+        <mxCell id="magazijn" value="Magazijn" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="720" y="100" width="250" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="magazijn-attrs" value="+ Id: MEDIUMINT&#xa;+ ProductId: MEDIUMINT (FK)&#xa;+ VerpakkingsEenheid: DECIMAL(6,3)&#xa;+ AantalAanwezig: INT&#xa;+ IsActief: BIT&#xa;+ Opmerking: VARCHAR(250)&#xa;+ DatumAangemaakt: DateTime&#xa;+ DatumGewijzigd: DateTime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="magazijn">
+          <mxGeometry y="26" width="250" height="184" as="geometry" />
+        </mxCell>
+
+        <!-- ProductPerAllergeen Class -->
+        <mxCell id="productperallergeen" value="ProductPerAllergeen" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="400" y="350" width="250" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="productperallergeen-attrs" value="+ Id: MEDIUMINT&#xa;+ ProductId: MEDIUMINT (FK)&#xa;+ AllergeenId: SMALLINT (FK)&#xa;+ IsActief: BIT&#xa;+ Opmerking: VARCHAR(250)&#xa;+ DatumAangemaakt: DateTime&#xa;+ DatumGewijzigd: DateTime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="productperallergeen">
+          <mxGeometry y="26" width="250" height="164" as="geometry" />
+        </mxCell>
+
+        <!-- Leverancier Class -->
+        <mxCell id="leverancier" value="Leverancier" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="80" y="600" width="250" height="230" as="geometry" />
+        </mxCell>
+        <mxCell id="leverancier-attrs" value="+ Id: SMALLINT&#xa;+ Naam: VARCHAR(60)&#xa;+ Contactpersoon: VARCHAR(60)&#xa;+ Leveranciernummer: VARCHAR(11)&#xa;+ Mobiel: VARCHAR(11)&#xa;+ ContactId: SMALLINT (FK)&#xa;+ IsActief: BIT&#xa;+ Opmerking: VARCHAR(250)&#xa;+ DatumAangemaakt: DateTime&#xa;+ DatumGewijzigd: DateTime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="leverancier">
+          <mxGeometry y="26" width="250" height="204" as="geometry" />
+        </mxCell>
+
+        <!-- Contact Class -->
+        <mxCell id="contact" value="Contact" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#fad9d5;strokeColor=#ae4132;" vertex="1" parent="1">
+          <mxGeometry x="400" y="600" width="250" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="contact-attrs" value="+ Id: SMALLINT&#xa;+ Straat: VARCHAR(100)&#xa;+ Huisnummer: VARCHAR(10)&#xa;+ Postcode: VARCHAR(10)&#xa;+ Stad: VARCHAR(60)&#xa;+ IsActief: BIT&#xa;+ Opmerking: VARCHAR(250)&#xa;+ DatumAangemaakt: DateTime&#xa;+ DatumGewijzigd: DateTime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="contact">
+          <mxGeometry y="26" width="250" height="184" as="geometry" />
+        </mxCell>
+
+        <!-- ProductPerLeverancier Class -->
+        <mxCell id="productperleverancier" value="ProductPerLeverancier" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="720" y="350" width="280" height="230" as="geometry" />
+        </mxCell>
+        <mxCell id="productperleverancier-attrs" value="+ Id: MEDIUMINT&#xa;+ LeverancierId: SMALLINT (FK)&#xa;+ ProductId: MEDIUMINT (FK)&#xa;+ DatumLevering: DATE&#xa;+ Aantal: INT&#xa;+ DatumEerstVolgendeLevering: DATE&#xa;+ IsActief: BIT&#xa;+ Opmerking: VARCHAR(250)&#xa;+ DatumAangemaakt: DateTime&#xa;+ DatumGewijzigd: DateTime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="productperleverancier">
+          <mxGeometry y="26" width="280" height="204" as="geometry" />
+        </mxCell>
+
+        <!-- Relationships -->
+        <!-- Product to Magazijn (1:1) -->
+        <mxCell id="rel-product-magazijn" value="1" style="endArrow=none;html=1;edgeStyle=orthogonalEdgeStyle;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="product-attrs" target="magazijn-attrs">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="650" y="190" as="sourcePoint" />
+            <mxPoint x="720" y="190" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-product-magazijn-label" value="heeft voorraad in" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-product-magazijn">
+          <mxGeometry x="-0.1" y="1" relative="1" as="geometry">
+            <mxPoint x="5" y="-9" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-product-magazijn-card1" value="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;" vertex="1" parent="1">
+          <mxGeometry x="650" y="175" width="20" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Product to ProductPerAllergeen (1:*) -->
+        <mxCell id="rel-product-ppa" value="" style="endArrow=none;html=1;edgeStyle=orthogonalEdgeStyle;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="product" target="productperallergeen">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-product-ppa-card1" value="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;" vertex="1" parent="1">
+          <mxGeometry x="525" y="295" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-product-ppa-card2" value="*" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;" vertex="1" parent="1">
+          <mxGeometry x="525" y="325" width="20" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Allergeen to ProductPerAllergeen (*:1) -->
+        <mxCell id="rel-allergeen-ppa" value="" style="endArrow=none;html=1;edgeStyle=orthogonalEdgeStyle;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="allergeen-attrs" target="productperallergeen-attrs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-allergeen-ppa-label" value="aanwezig in" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-allergeen-ppa">
+          <mxGeometry x="-0.1" y="1" relative="1" as="geometry">
+            <mxPoint y="-9" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-allergeen-ppa-card1" value="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;" vertex="1" parent="1">
+          <mxGeometry x="330" y="430" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-allergeen-ppa-card2" value="*" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;" vertex="1" parent="1">
+          <mxGeometry x="375" y="430" width="20" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Product to ProductPerLeverancier (1:*) -->
+        <mxCell id="rel-product-ppl" value="" style="endArrow=none;html=1;edgeStyle=orthogonalEdgeStyle;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="product" target="productperleverancier">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-product-ppl-card1" value="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;" vertex="1" parent="1">
+          <mxGeometry x="650" y="240" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-product-ppl-card2" value="*" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;" vertex="1" parent="1">
+          <mxGeometry x="860" y="325" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-product-ppl-label" value="geleverd via" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-product-ppl">
+          <mxGeometry x="-0.1" y="1" relative="1" as="geometry">
+            <mxPoint x="25" y="15" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Leverancier to ProductPerLeverancier (1:*) -->
+        <mxCell id="rel-leverancier-ppl" value="" style="endArrow=none;html=1;edgeStyle=orthogonalEdgeStyle;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="leverancier" target="productperleverancier-attrs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-leverancier-ppl-card1" value="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;" vertex="1" parent="1">
+          <mxGeometry x="330" y="640" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-leverancier-ppl-card2" value="*" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;" vertex="1" parent="1">
+          <mxGeometry x="695" y="455" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-leverancier-ppl-label" value="levert" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-leverancier-ppl">
+          <mxGeometry x="-0.1" y="1" relative="1" as="geometry">
+            <mxPoint x="50" y="-30" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Leverancier to Contact (*:0..1) -->
+        <mxCell id="rel-leverancier-contact" value="" style="endArrow=none;html=1;edgeStyle=orthogonalEdgeStyle;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="leverancier" target="contact-attrs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-leverancier-contact-card1" value="*" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;" vertex="1" parent="1">
+          <mxGeometry x="205" y="835" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-leverancier-contact-card2" value="0..1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="685" width="35" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-leverancier-contact-label" value="heeft adres" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-leverancier-contact">
+          <mxGeometry x="-0.1" y="1" relative="1" as="geometry">
+            <mxPoint x="10" y="-25" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Title -->
+        <mxCell id="title" value="BE-Jamin Database Class Diagram" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="400" height="40" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
