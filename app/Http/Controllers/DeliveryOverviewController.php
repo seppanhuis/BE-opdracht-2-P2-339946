@@ -150,8 +150,23 @@ class DeliveryOverviewController extends Controller
         $endDate = $request->input('end_date');
 
         if (!$startDate || !$endDate) {
-            return redirect()->route('delivery.overview')
-                ->with('error', 'Start- en einddatum zijn verplicht');
+            // Fallback for clicks from overview without active date filter.
+            $dateRange = DB::selectOne('
+                SELECT
+                    MIN(DatumLevering) AS StartDate,
+                    MAX(DatumLevering) AS EndDate
+                FROM ProductPerLeverancier
+                WHERE ProductId = ?
+                    AND IsActief = 1
+            ', [$productId]);
+
+            if (!$dateRange || !$dateRange->StartDate || !$dateRange->EndDate) {
+                return redirect()->route('delivery.overview')
+                    ->with('error', 'Geen leveringsdatums gevonden voor dit product');
+            }
+
+            $startDate = date('Y-m-d', strtotime($dateRange->StartDate));
+            $endDate = date('Y-m-d', strtotime($dateRange->EndDate));
         }
 
         try {
