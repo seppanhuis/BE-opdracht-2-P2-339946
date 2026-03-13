@@ -7,6 +7,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\LeverancierController;
 use App\Http\Controllers\AllergeenController;
+use App\Http\Controllers\DeliveryOverviewController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -39,6 +40,10 @@ Route::put('/leveranciers/{id}', [LeverancierController::class, 'update'])->name
 // Overzicht Allergenen
 Route::get('/allergenen', [AllergeenController::class, 'index'])->name('allergeen.index');
 Route::get('/allergenen/product/{id}/leverancier', [AllergeenController::class, 'leverancierInfo'])->name('allergeen.leverancier');
+
+// Overzicht geleverde producten (User Story 1)
+Route::get('/overzicht-geleverde-producten', [DeliveryOverviewController::class, 'index'])->name('delivery.overview');
+Route::get('/overzicht-geleverde-producten/product/{productId}', [DeliveryOverviewController::class, 'productDetails'])->name('delivery.product-details');
 
 
 
