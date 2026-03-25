@@ -4,13 +4,78 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use RuntimeException;
 
 class ProductModel extends Model
 {
+    /**
+     * Execute a stored procedure call via PDO.
+     */
+    private function callProcedure(string $sql, array $params = []): array
+    {
+        $pdo = DB::connection()->getPdo();
+        $statement = $pdo->prepare($sql);
+
+        foreach ($params as $index => $value) {
+            $type = is_int($value) ? \PDO::PARAM_INT : \PDO::PARAM_STR;
+            if ($value === null) {
+                $type = \PDO::PARAM_NULL;
+            }
+
+            $statement->bindValue($index + 1, $value, $type);
+        }
+
+        $statement->execute();
+        $rows = $statement->fetchAll(\PDO::FETCH_OBJ);
+        $statement->closeCursor();
+
+        return $rows;
+    }
+
     public function sp_GetAllProducts()
     {
         return DB::select('CALL sp_GetAllProducts()');
     }
+
+    /**
+     * User Story 1: overzicht producten uit assortiment binnen datumbereik.
+     */
+    public function sp_GetDeliveredProductsByDateRange(?string $startDate, ?string $endDate): array
+    {
+        return $this->callProcedure('CALL sp_GetDeliveredProductsByDateRange(?, ?)', [$startDate, $endDate]);
+    }
+
+    /**
+     * User Story 1: detail van een product met allergenen-boolean velden.
+     */
+    public function sp_GetProductDeliveryDetails(int $productId): ?object
+    {
+        $rows = $this->callProcedure('CALL sp_GetProductDeliveryDetailsByDateRange(?)', [$productId]);
+        return count($rows) ? $rows[0] : null;
+    }
+
+    /**
+     * User Story 1: verwijder product uit assortiment indien toegestaan.
+     */
+    public function sp_DeleteProductFromAssortiment(int $productId, string $currentDate): ?object
+    {
+        try {
+            $rows = $this->callProcedure('CALL sp_DeleteProductFromAssortiment(?, ?)', [$productId, $currentDate]);
+            return count($rows) ? $rows[0] : null;
+        } catch (\Throwable $e) {
+            throw new RuntimeException($this->parseDatabaseError($e->getMessage()));
+        }
+    }
+
+    private function parseDatabaseError(string $message): string
+    {
+        if (preg_match('/:\s*\d+\s+([^(]+)(?:\s*\(Connection:)?/', $message, $matches)) {
+            return trim($matches[1]);
+        }
+
+        return $message;
+    }
+
     /**
      * Call stored procedure sp_GetLeverantieInfo which returns supplier basic info
      * (Naam, Contactpersoon, Leveranciernummer, Mobiel) for a product.

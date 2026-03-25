@@ -1,136 +1,77 @@
 <x-layouts.app :title="$title">
-    @push('head')
-        <style>
-            /* sticky header background for light mode */
-            .sticky-header th {
-                position: sticky;
-                top: 0;
-                background: white;
-                z-index: 5;
-            }
-
-            /* sticky header for dark mode */
-            .dark .sticky-header th {
-                background: #0b1220;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-            }
-
-            /* subtle row divider in dark mode for better separation */
-            .dark tbody tr td {
-                border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-            }
-        </style>
-    @endpush
-
     <main class="flex-1 w-full">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
             <div class="bg-white dark:bg-zinc-900 shadow ring-1 ring-black/5 dark:ring-white/5 rounded-lg p-6">
-                <!-- Header -->
                 <div class="mb-6">
-                    <div class="flex items-center justify-between mb-4">
+                    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
                         <h1 class="text-2xl font-semibold text-gray-900 dark:text-white">
                             {{ $title }}
                         </h1>
                         <a
-                            href="{{ route('delivery.overview', ['start_date' => $startDate, 'end_date' => $endDate]) }}"
-                            class="inline-flex items-center px-4 py-2 bg-gray-300 dark:bg-zinc-700 text-gray-700 dark:text-white text-sm font-medium rounded-md hover:bg-gray-400 dark:hover:bg-zinc-600"
+                            href="{{ route('delivery.overview') }}"
+                            class="inline-flex items-center rounded-md bg-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-400 dark:bg-zinc-700 dark:text-white dark:hover:bg-zinc-600"
                         >
                             ← Terug naar overzicht
                         </a>
                     </div>
-
-                    <!-- Selected Date Range -->
-                    <div class="bg-gray-50 dark:bg-zinc-800 p-4 rounded-lg">
-                        <p class="text-sm text-gray-700 dark:text-gray-300">
-                            <strong>Tijdsvak:</strong> {{ date('d-m-Y', strtotime($startDate)) }} t/m {{ date('d-m-Y', strtotime($endDate)) }}
-                        </p>
-                    </div>
                 </div>
 
-                <!-- Product Information -->
-                <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
-                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                        Productinformatie
-                    </h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                        <div>
-                            <span class="font-medium text-gray-700 dark:text-gray-300">Productnaam:</span>
-                            <span class="text-gray-900 dark:text-white ml-2">{{ $product->Naam }}</span>
-                        </div>
-                        <div>
-                            <span class="font-medium text-gray-700 dark:text-gray-300">Barcode:</span>
-                            <span class="text-gray-900 dark:text-white ml-2">{{ $product->Barcode }}</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Allergenen -->
-                @if(count($allergenen) > 0)
-                    <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 mb-6">
-                        <h3 class="text-md font-semibold text-gray-900 dark:text-white mb-2">
-                            Allergenen
-                        </h3>
-                        <ul class="list-disc list-inside space-y-1">
-                            @foreach($allergenen as $allergeen)
-                                <li class="text-sm text-gray-700 dark:text-gray-300">
-                                    <strong>{{ $allergeen->AllergeenNaam }}:</strong> {{ $allergeen->Omschrijving }}
-                                </li>
-                            @endforeach
-                        </ul>
+                @if(session('success'))
+                    <div class="mb-4 rounded-md border border-green-300 bg-green-50 px-4 py-3 text-sm text-green-700 dark:border-green-700 dark:bg-green-950/30 dark:text-green-300">
+                        {{ session('success') }}
                     </div>
                 @endif
 
-                <!-- Delivery History Table -->
-                <div class="mb-4">
-                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-                        Leveringsdata
-                    </h2>
-                </div>
+                @if(session('error'))
+                    <div class="mb-4 rounded-md border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-700 dark:bg-red-950/40 dark:text-red-300">
+                        {{ session('error') }}
+                    </div>
+                @endif
 
-                <div class="overflow-x-auto">
-                    <table class="min-w-full table-auto divide-y divide-gray-200 dark:divide-zinc-700">
-                        <thead class="sticky-header bg-gray-50 dark:bg-zinc-900">
-                            <tr>
-                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
-                                    Datum Levering
-                                </th>
-                                <th scope="col" class="px-4 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
-                                    Aantal
-                                </th>
-                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
-                                    Leverancier
-                                </th>
-                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
-                                    Contactpersoon
-                                </th>
-                            </tr>
-                        </thead>
+                <div class="overflow-x-auto rounded-md border border-gray-200 dark:border-zinc-700 mb-5">
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-zinc-700">
                         <tbody class="bg-white dark:bg-zinc-900 divide-y divide-gray-200 dark:divide-zinc-700">
-                            @forelse ($deliveries as $delivery)
-                                <tr class="odd:bg-white even:bg-gray-50 odd:dark:bg-zinc-900 even:dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-700">
-                                    <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
-                                        {{ date('d-m-Y', strtotime($delivery->DatumLevering)) }}
-                                    </td>
-                                    <td class="px-4 py-3 text-sm text-center text-gray-900 dark:text-gray-100">
-                                        {{ $delivery->Aantal }}
-                                    </td>
-                                    <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
-                                        {{ $delivery->LeverancierNaam }}
-                                    </td>
-                                    <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
-                                        {{ $delivery->Contactpersoon }}
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="4" class="px-4 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
-                                        Er zijn geen leveringen gevonden voor dit product in de geselecteerde periode.
-                                    </td>
-                                </tr>
-                            @endforelse
+                            <tr>
+                                <td class="w-1/2 px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300">Naam Product:</td>
+                                <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">{{ $product->Naam }}</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300">Barcode:</td>
+                                <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">{{ $product->Barcode }}</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300">Bevat gluten</td>
+                                <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">{{ $product->BevatGluten }}</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300">Bevat gelatine</td>
+                                <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">{{ $product->BevatGelatine }}</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300">Bevat AZO-kleurstof</td>
+                                <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">{{ $product->BevatAzoKleurstof }}</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300">Bevat lactose</td>
+                                <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">{{ $product->BevatLactose }}</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300">Bevat soja</td>
+                                <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">{{ $product->BevatSoja }}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
+
+                <form method="POST" action="{{ route('delivery.product-delete', ['productId' => $product->Id]) }}">
+                    @csrf
+                    <button
+                        type="submit"
+                        class="inline-flex items-center justify-center rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600"
+                    >
+                        Verwijder
+                    </button>
+                </form>
             </div>
         </div>
     </main>

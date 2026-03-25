@@ -69,6 +69,7 @@ VALUES
 -- **************************************************************
 DROP TABLE IF EXISTS ProductPerLeverancier;
 DROP TABLE IF EXISTS Magazijn;
+DROP TABLE IF EXISTS ProductEinddatumLevering;
 DROP TABLE IF EXISTS ProductPerAllergeen;
 DROP TABLE IF EXISTS Product;
 
@@ -116,6 +117,52 @@ VALUES
 
 -- Update Winegums to inactive (not produced anymore)
 UPDATE Product SET IsActief = 0 WHERE Naam = 'Winegums';
+
+
+-- Step 05b:
+-- Goal: Create a new table ProductEinddatumLevering
+-- ********************************************************
+-- Version:       Date:       Author:           Description
+-- ********       ****        *******           ***********
+-- 01             24-03-2026  Copilot           New table
+-- ********************************************************
+
+CREATE TABLE IF NOT EXISTS ProductEinddatumLevering
+(
+     Id                   MEDIUMINT       UNSIGNED          NOT NULL      AUTO_INCREMENT
+    ,ProductId            MEDIUMINT       UNSIGNED          NOT NULL
+    ,EinddatumLevering    DATE                              NOT NULL
+    ,IsActief             BIT                               NOT NULL      DEFAULT 1
+    ,Opmerking            VARCHAR(250)                          NULL      DEFAULT NULL
+    ,DatumAangemaakt      Datetime(6)                       NOT NULL      DEFAULT CURRENT_TIMESTAMP(6)
+    ,DatumGewijzigd       Datetime(6)                       NOT NULL      DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)
+    ,CONSTRAINT           PK_ProductEinddatumLevering_Id   PRIMARY KEY (Id)
+    ,CONSTRAINT           FK_ProductEinddatumLevering_ProductId_Product_Id  FOREIGN KEY (ProductId) REFERENCES Product(Id)
+) ENGINE=InnoDB AUTO_INCREMENT=1;
+
+
+-- Step 05c:
+-- Goal: Fill table ProductEinddatumLevering with data
+-- ***********************************************************
+-- Version:       Date:       Author:           Description
+-- ********       ****        ****************  ***********
+-- 01             24-03-2026  Copilot           Insert Records
+-- ***********************************************************
+
+INSERT INTO ProductEinddatumLevering
+(
+     ProductId
+    ,EinddatumLevering
+)
+VALUES
+     (1, '2024-06-01')
+    ,(2, '2024-05-22')
+    ,(3, '2024-05-30')
+    ,(4, '2024-05-12')
+    ,(7, '2024-05-27')
+    ,(10, '2024-05-03')
+    ,(11, '2024-02-09')
+    ,(14, '2024-01-01');
 
 
 -- Step 06:
@@ -167,8 +214,7 @@ VALUES
     ,(10, 3, NULL)
     ,(11, 2, 367)
     ,(12, 1, 467)
-    ,(13, 5, 20)
-    ,(14, 1, 0);
+    ,(13, 5, 20);
 
 
 -- Step 08:
@@ -391,4 +437,66 @@ VALUES
  ,(14, 5)
  ,(13, 4)
  ,(13, 5);
+
+
+-- Step 14:
+-- Goal: Stored procedure voor veilig verwijderen product uit assortiment
+-- ***********************************************************
+-- Version:       Date:       Author:           Description
+-- ********       ****        ****************  ***********
+-- 01             24-03-2026  Copilot           User story 1 scenario 02/03
+-- ***********************************************************
+
+DROP PROCEDURE IF EXISTS sp_DeleteProductFromAssortiment;
+
+DELIMITER $$
+
+CREATE PROCEDURE sp_DeleteProductFromAssortiment(
+    IN p_ProductId INT,
+    IN p_HuidigeDatum DATE
+)
+BEGIN
+    DECLARE v_Einddatum DATE;
+
+    SELECT pel.EinddatumLevering
+    INTO v_Einddatum
+    FROM ProductEinddatumLevering pel
+    WHERE pel.ProductId = p_ProductId
+      AND pel.IsActief = 1
+    LIMIT 1;
+
+    IF v_Einddatum IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Product niet gevonden of geen einddatum levering bekend';
+    END IF;
+
+    IF p_HuidigeDatum < v_Einddatum THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Product kan niet worden verwijdert, datum van vandaag ligt voor einddatum levering';
+    END IF;
+
+    UPDATE Product
+    SET IsActief = 0
+    WHERE Id = p_ProductId;
+
+    UPDATE Magazijn
+    SET IsActief = 0
+    WHERE ProductId = p_ProductId;
+
+    UPDATE ProductPerLeverancier
+    SET IsActief = 0
+    WHERE ProductId = p_ProductId;
+
+    UPDATE ProductPerAllergeen
+    SET IsActief = 0
+    WHERE ProductId = p_ProductId;
+
+    UPDATE ProductEinddatumLevering
+    SET IsActief = 0
+    WHERE ProductId = p_ProductId;
+
+    SELECT 1 AS Success, 'Product is succesvol verwijdert' AS Message;
+END$$
+
+DELIMITER ;
 

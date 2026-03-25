@@ -64,7 +64,7 @@
                             </span>
                             <span>
                                 <a href="{{ route('delivery.overview') }}" class="inline-flex items-center space-x-1 font-medium underline underline-offset-4 text-[#f53003] dark:text-[#FF4433]">
-                                    <span>Overzicht geleverde producten</span>
+                                    <span>Overzicht producten uit het assortiment</span>
                                 </a>
                             </span>
                         </li>

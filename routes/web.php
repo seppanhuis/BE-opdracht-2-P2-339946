@@ -41,9 +41,10 @@ Route::put('/leveranciers/{id}', [LeverancierController::class, 'update'])->name
 Route::get('/allergenen', [AllergeenController::class, 'index'])->name('allergeen.index');
 Route::get('/allergenen/product/{id}/leverancier', [AllergeenController::class, 'leverancierInfo'])->name('allergeen.leverancier');
 
-// Overzicht geleverde producten (User Story 1)
-Route::get('/overzicht-geleverde-producten', [DeliveryOverviewController::class, 'index'])->name('delivery.overview');
-Route::get('/overzicht-geleverde-producten/product/{productId}', [DeliveryOverviewController::class, 'productDetails'])->name('delivery.product-details');
+// Overzicht producten uit het assortiment (User Story 1)
+Route::get('/overzicht-producten-uit-het-assortiment', [DeliveryOverviewController::class, 'index'])->name('delivery.overview');
+Route::get('/overzicht-producten-uit-het-assortiment/product/{productId}', [DeliveryOverviewController::class, 'productDetails'])->name('delivery.product-details');
+Route::post('/overzicht-producten-uit-het-assortiment/product/{productId}/verwijder', [DeliveryOverviewController::class, 'deleteProduct'])->name('delivery.product-delete');
 
 
 

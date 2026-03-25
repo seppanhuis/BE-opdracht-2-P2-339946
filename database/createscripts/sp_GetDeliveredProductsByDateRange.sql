@@ -1,9 +1,10 @@
 -- ************************************************************************************************
--- Doel: Stored procedure to get all delivered products within a date range with total amounts
+-- Doel: Haal producten op die uit het assortiment gaan binnen een datumrange
 -- ************************************************************************************************
 -- Versie  Datum         Auteur              Beschrijving
 -- ******  *********     *****************   ******************************************************
--- 01      10-03-2026    Copilot             Nieuwe stored procedure voor user story 1
+-- 01      10-03-2026    Copilot             Eerste versie
+-- 02      24-03-2026    Copilot             Filter op EinddatumLevering + leverancier/stad
 -- ************************************************************************************************
 
 DROP PROCEDURE IF EXISTS sp_GetDeliveredProductsByDateRange;
@@ -16,33 +17,40 @@ CREATE PROCEDURE sp_GetDeliveredProductsByDateRange(
 )
 BEGIN
     SELECT
-        lev.Id AS LeverancierId,
-        lev.Naam AS LeverancierNaam,
-        lev.Contactpersoon,
-        lev.Leveranciernummer,
-        lev.Mobiel,
         prod.Id AS ProductId,
         prod.Naam AS ProductNaam,
-        SUM(ppl.Aantal) AS TotaalGeleverd,
-        MIN(ppl.DatumLevering) AS EersteLevering,
-        MAX(ppl.DatumLevering) AS LaatsteLevering
+        prod.Barcode,
+        pel.EinddatumLevering,
+        lev.Naam AS LeverancierNaam,
+        lev.Contactpersoon,
+        c.Stad
     FROM
-        ProductPerLeverancier ppl
-    INNER JOIN
-        Leverancier lev ON ppl.LeverancierId = lev.Id
-    INNER JOIN
-        Product prod ON ppl.ProductId = prod.Id
+        ProductEinddatumLevering pel
+    INNER JOIN Product prod
+        ON pel.ProductId = prod.Id
+    LEFT JOIN (
+        SELECT pplx.ProductId, MAX(pplx.Id) AS LaatstePplId
+        FROM ProductPerLeverancier pplx
+        WHERE pplx.IsActief = 1
+        GROUP BY pplx.ProductId
+    ) AS laatsteLevering
+        ON laatsteLevering.ProductId = prod.Id
+    LEFT JOIN ProductPerLeverancier ppl
+        ON ppl.Id = laatsteLevering.LaatstePplId
+    LEFT JOIN Leverancier lev
+        ON ppl.LeverancierId = lev.Id
+       AND lev.IsActief = 1
+    LEFT JOIN Contact c
+        ON lev.ContactId = c.Id
+       AND c.IsActief = 1
     WHERE
-        ppl.DatumLevering >= p_StartDatum
-        AND ppl.DatumLevering <= p_EindDatum
-        AND ppl.IsActief = 1
-        AND lev.IsActief = 1
+        pel.IsActief = 1
         AND prod.IsActief = 1
-    GROUP BY
-        lev.Id, lev.Naam, lev.Contactpersoon, lev.Leveranciernummer, lev.Mobiel,
-        prod.Id, prod.Naam
+        AND (p_StartDatum IS NULL OR pel.EinddatumLevering >= p_StartDatum)
+        AND (p_EindDatum IS NULL OR pel.EinddatumLevering <= p_EindDatum)
     ORDER BY
-        lev.Naam ASC, prod.Naam ASC;
+        pel.EinddatumLevering DESC,
+        prod.Naam ASC;
 END //
 
 DELIMITER ;

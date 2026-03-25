@@ -1,9 +1,10 @@
 -- ************************************************************************************************
--- Doel: Stored procedure to get delivery details for a specific product within a date range
+-- Doel: Productdetail inclusief allergenen-vlaggen (Ja/Nee)
 -- ************************************************************************************************
 -- Versie  Datum         Auteur              Beschrijving
 -- ******  *********     *****************   ******************************************************
--- 01      10-03-2026    Copilot             Nieuwe stored procedure voor user story 1 scenario 2
+-- 01      10-03-2026    Copilot             Eerste versie
+-- 02      24-03-2026    Copilot             Omgezet naar detailrecord voor verwijderpagina
 -- ************************************************************************************************
 
 DROP PROCEDURE IF EXISTS sp_GetProductDeliveryDetailsByDateRange;
@@ -11,58 +12,58 @@ DROP PROCEDURE IF EXISTS sp_GetProductDeliveryDetailsByDateRange;
 DELIMITER //
 
 CREATE PROCEDURE sp_GetProductDeliveryDetailsByDateRange(
-    IN p_ProductId INT,
-    IN p_StartDatum DATE,
-    IN p_EindDatum DATE
+    IN p_ProductId INT
 )
 BEGIN
-    -- Get product basic info first
     SELECT
-        prod.Id AS ProductId,
-        prod.Naam AS ProductNaam,
-        prod.Barcode
+        prod.Id,
+        prod.Naam,
+        prod.Barcode,
+        pel.EinddatumLevering,
+        CASE WHEN EXISTS (
+            SELECT 1
+            FROM ProductPerAllergeen ppa
+            WHERE ppa.ProductId = prod.Id
+              AND ppa.AllergeenId = 1
+              AND ppa.IsActief = 1
+        ) THEN 'Ja' ELSE 'Nee' END AS BevatGluten,
+        CASE WHEN EXISTS (
+            SELECT 1
+            FROM ProductPerAllergeen ppa
+            WHERE ppa.ProductId = prod.Id
+              AND ppa.AllergeenId = 2
+              AND ppa.IsActief = 1
+        ) THEN 'Ja' ELSE 'Nee' END AS BevatGelatine,
+        CASE WHEN EXISTS (
+            SELECT 1
+            FROM ProductPerAllergeen ppa
+            WHERE ppa.ProductId = prod.Id
+              AND ppa.AllergeenId = 3
+              AND ppa.IsActief = 1
+        ) THEN 'Ja' ELSE 'Nee' END AS BevatAzoKleurstof,
+        CASE WHEN EXISTS (
+            SELECT 1
+            FROM ProductPerAllergeen ppa
+            WHERE ppa.ProductId = prod.Id
+              AND ppa.AllergeenId = 4
+              AND ppa.IsActief = 1
+        ) THEN 'Ja' ELSE 'Nee' END AS BevatLactose,
+        CASE WHEN EXISTS (
+            SELECT 1
+            FROM ProductPerAllergeen ppa
+            WHERE ppa.ProductId = prod.Id
+              AND ppa.AllergeenId = 5
+              AND ppa.IsActief = 1
+        ) THEN 'Ja' ELSE 'Nee' END AS BevatSoja
     FROM
         Product prod
+    INNER JOIN ProductEinddatumLevering pel
+        ON pel.ProductId = prod.Id
     WHERE
         prod.Id = p_ProductId
         AND prod.IsActief = 1
+        AND pel.IsActief = 1
     LIMIT 1;
-
-    -- Get delivery details for this product in the date range
-    SELECT
-        ppl.DatumLevering,
-        ppl.Aantal,
-        ppl.DatumEerstVolgendeLevering,
-        lev.Naam AS LeverancierNaam,
-        lev.Contactpersoon
-    FROM
-        ProductPerLeverancier ppl
-    INNER JOIN
-        Leverancier lev ON ppl.LeverancierId = lev.Id
-    WHERE
-        ppl.ProductId = p_ProductId
-        AND ppl.DatumLevering >= p_StartDatum
-        AND ppl.DatumLevering <= p_EindDatum
-        AND ppl.IsActief = 1
-        AND lev.IsActief = 1
-    ORDER BY
-        ppl.DatumLevering DESC;
-
-    -- Get allergenen for this product
-    SELECT
-        a.Id AS AllergeenId,
-        a.Naam AS AllergeenNaam,
-        a.Omschrijving
-    FROM
-        ProductPerAllergeen ppa
-    INNER JOIN
-        Allergeen a ON ppa.AllergeenId = a.Id
-    WHERE
-        ppa.ProductId = p_ProductId
-        AND ppa.IsActief = 1
-        AND a.IsActief = 1
-    ORDER BY
-        a.Naam ASC;
 END //
 
 DELIMITER ;

@@ -56,7 +56,7 @@
             }
 
             const previousInput = this.getInput(index - 1);
-    
+
             previousInput.value = '';
             previousInput.focus();
 
